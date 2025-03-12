@@ -10,6 +10,7 @@ import PageRecover from '@/pages/auth/recover/RecoverPass';
 
 import PageProfile from '@/pages/profile/Profile';
 import PageScanQr from '@/pages/scanqr/ScanQr';
+import PageDashboard from '@/pages/dashboard/Dashboard';
 
 
 
@@ -27,6 +28,7 @@ function RouterApp() {
       {/* Rutas privadas (con PrivateLayout) */}
       <Route element={<PrivateLayout />}>
         <Route path="/profile" element={<PageProfile />} />
+        <Route path="/dashboard" element={<PageDashboard />} />
         <Route path="/scanqr" element={<PageScanQr />} />
       </Route>
 
