@@ -1,23 +1,25 @@
-
-import { Routes, Route } from 'react-router-dom';
-import PrivateLayout from '@/layout/PrivateLayout';
+import { Routes, Route } from "react-router-dom";
+import PrivateLayout from "@/layout/PrivateLayout";
 //  auth
-import PageLogin from '@/pages/auth/login/Login';
-import PageRecover from '@/pages/auth/recover/RecoverPass';
+import PageLogin from "@/pages/auth/login/Login";
+import PageRecover from "@/pages/auth/recover/RecoverPass";
 
 //  crear  validacion para que no se pueda acceder a la pagina si no esta logeado
 
-
-import PageProfile from '@/pages/profile/Profile';
-import PageScanQr from '@/pages/scanqr/ScanQr';
-import PageDashboard from '@/pages/dashboard/Dashboard';
-
-
-
-
-
+import PageProfile from "@/pages/profile/Profile";
+import PageScanQr from "@/pages/scanqr/ScanQr";
+import PageDashboard from "@/pages/dashboard/Dashboard";
+import { useEffect } from "react";
+import { registrationService } from "@/services/registration.service";
+import { distributorService } from "@/services/distributor.service";
 
 function RouterApp() {
+  useEffect(() => {
+    const register = registrationService.getAll();
+    const distributors = distributorService.getAll();
+    console.log(register);
+    console.log(distributors);
+  }, []);
   return (
     <Routes>
       {/* de Rutas públicas */}
@@ -31,7 +33,6 @@ function RouterApp() {
         <Route path="/dashboard" element={<PageDashboard />} />
         <Route path="/scanqr" element={<PageScanQr />} />
       </Route>
-
     </Routes>
   );
 }
