@@ -9,17 +9,8 @@ import PageRecover from "@/pages/auth/recover/RecoverPass";
 import PageProfile from "@/pages/profile/Profile";
 import PageScanQr from "@/pages/scanqr/ScanQr";
 import PageDashboard from "@/pages/dashboard/Dashboard";
-import { useEffect } from "react";
-import { registrationService } from "@/services/registration.service";
-import { distributorService } from "@/services/distributor.service";
 
 function RouterApp() {
-  useEffect(() => {
-    const register = registrationService.getAll();
-    const distributors = distributorService.getAll();
-    console.log(register);
-    console.log(distributors);
-  }, []);
   return (
     <Routes>
       {/* de Rutas públicas */}
