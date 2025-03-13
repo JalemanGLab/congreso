@@ -1,10 +1,38 @@
 import { createClient } from "@supabase/supabase-js";
-import { toast } from "sonner";
 
 const supabase = createClient(
   import.meta.env.VITE_SUPABASE_URL,
   import.meta.env.VITE_SUPABASE_ANON_KEY
 );
+
+// Tipos para los procedimientos clínicos y marcas en español
+export type ClinicalProcedure =
+  | "Odontología General"
+  | "Restauraciones indirectas"
+  | "Restauraciones directas"
+  | "Diseño de sonrisa"
+  | "Ortodoncia tradicional"
+  | "Ortodoncia con autoligado"
+  | "Ortodoncia con Alineadores"
+  | "Odontopediatra"
+  | "Estudiante"
+  | "Otro";
+
+export type ProductBrand =
+  | "Ivoclar"
+  | "Ultradent"
+  | "Bisco"
+  | "Ormco"
+  | "Forestadent"
+  | "Invisalign"
+  | "Clear Correct"
+  | "Otro";
+
+export interface Distributor {
+  id: string;
+  name: string;
+  is_active: boolean;
+}
 
 export interface Registration {
   id?: string;
@@ -14,35 +42,10 @@ export interface Registration {
   document_id: string;
   phone: string;
   city: string;
-  redemption_place:
-    | "Dental 83"
-    | "Dental Nader"
-    | "Dentales Market"
-    | "Casa Dental"
-    | "Orbidental"
-    | "Bracket"
-    | "Adental";
-  clinical_procedure:
-    | "General Dentistry"
-    | "Indirect Restorations"
-    | "Direct Restorations"
-    | "Smile Design"
-    | "Traditional Orthodontics"
-    | "Self-ligating Orthodontics"
-    | "Clear Aligners"
-    | "Pediatric Dentistry"
-    | "Student"
-    | "Other";
+  distributor_id: string;
+  clinical_procedure: ClinicalProcedure;
   other_clinical_procedure?: string;
-  brand:
-    | "Ivoclar"
-    | "Ultradent"
-    | "Bisco"
-    | "Ormco"
-    | "Forestadent"
-    | "Invisalign"
-    | "Clear Correct"
-    | "Other";
+  brand: ProductBrand;
   other_brand?: string;
   weekly_cases: number;
   contact_authorized: boolean;
@@ -52,15 +55,26 @@ export interface Registration {
 
 export const registrationService = {
   // Crear un nuevo registro
-  async create(data: Omit<Registration, "id" | "status">) {
+  async create(data: Omit<Registration, "id" | "status" | "code">) {
     try {
+      // Verificar que el distribuidor existe
+      const { data: distributor, error: distributorError } = await supabase
+        .from("distributors")
+        .select("id")
+        .eq("id", data.distributor_id)
+        .single();
+
+      if (distributorError || !distributor) {
+        throw new Error("Distribuidor no válido");
+      }
+
       const { data: registration, error } = await supabase
         .from("registrations")
         .insert([
           {
             ...data,
             status: "registrado",
-            code: `EVENT${Date.now()}`, // Debemos ponernos de acuerdo a como vamos a generar los codigos
+            code: `EVENT${Date.now()}`, // Debemos ponernos de acuerdo  para generar un codigo unico
           },
         ])
         .select()
@@ -69,24 +83,29 @@ export const registrationService = {
       if (error) throw error;
       return registration;
     } catch (error) {
-      toast.error(error as string);
-      throw error;
+      throw error instanceof Error ? error.message : "Error al crear registro";
     }
   },
 
-  // Obtener todos los registros
+  // Obtener todos los registros con información del distribuidor
   async getAll() {
     try {
       const { data, error } = await supabase
         .from("registrations")
-        .select("*")
+        .select(
+          `
+          *,
+          distributor:distributors(name)
+        `
+        )
         .order("created_at", { ascending: false });
 
       if (error) throw error;
       return data;
     } catch (error) {
-      toast.error(error as string);
-      throw error;
+      throw error instanceof Error
+        ? error.message
+        : "Error al obtener registros";
     }
   },
 
@@ -95,15 +114,21 @@ export const registrationService = {
     try {
       const { data, error } = await supabase
         .from("registrations")
-        .select("*")
+        .select(
+          `
+          *,
+          distributor:distributors(name)
+        `
+        )
         .eq("id", id)
         .single();
 
       if (error) throw error;
       return data;
     } catch (error) {
-      toast.error(error as string);
-      throw error;
+      throw error instanceof Error
+        ? error.message
+        : "Error al obtener registro";
     }
   },
 
@@ -119,8 +144,9 @@ export const registrationService = {
       if (error && error.code !== "PGRST116") return false;
       return !!data;
     } catch (error) {
-      toast.error(error as string);
-      throw error;
+      throw error instanceof Error
+        ? error.message
+        : "Error al verificar documento";
     }
   },
 
@@ -137,8 +163,9 @@ export const registrationService = {
       if (error) throw error;
       return data;
     } catch (error) {
-      toast.error(error as string);
-      throw error;
+      throw error instanceof Error
+        ? error.message
+        : "Error al actualizar la asistencia";
     }
   },
 };
