@@ -5,6 +5,9 @@ import PrivateLayout from '@/layout/PrivateLayout';
 import PageLogin from '@/pages/auth/login/Login';
 import PageRecover from '@/pages/auth/recover/RecoverPass';
 
+//  register
+import RegisterForm from '@/pages/register/RegisterForm';
+
 //  crear  validacion para que no se pueda acceder a la pagina si no esta logeado
 
 
@@ -24,6 +27,7 @@ function RouterApp() {
       <Route path="/" element={<PageLogin />} />
       <Route path="/login" element={<PageLogin />} />
       <Route path="/recover" element={<PageRecover />} />
+      <Route path="/register" element={<RegisterForm />} />
 
       {/* Rutas privadas (con PrivateLayout) */}
       <Route element={<PrivateLayout />}>
