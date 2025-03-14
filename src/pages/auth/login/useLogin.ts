@@ -1,63 +1,114 @@
-import { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
-import { supabase } from '@/lib/supabase'
-import { useAuthStore } from '@/store/useAuthStore'
+import { useState } from "react";
+import { useForm } from "react-hook-form";
+import { supabase } from "@/lib/supabase";
+import { useAuthStore } from "@/store/useAuthStore";
+import { useNavigate } from "react-router-dom";
+import { toast } from "sonner";
+import type { AuthError, AuthResponse } from "@supabase/supabase-js";
+
+interface LoginFormValues {
+  email: string;
+  password: string;
+}
+
+interface LoginState {
+  isLoading: boolean;
+  showPassword: boolean;
+}
 
 export const useLogin = () => {
-  const [loading, setLoading] = useState(false)
-  const [error, setError] = useState<string | null>(null)
-  const navigate = useNavigate()
-  const setAuth = useAuthStore(state => state.setAuth)
+  const [state, setState] = useState<LoginState>({
+    isLoading: false,
+    showPassword: false,
+  });
+  const navigate = useNavigate();
+  const { setAuth, clearAuth } = useAuthStore();
 
-  const login = async (email: string, password: string) => {
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<LoginFormValues>({
+    defaultValues: {
+      email: "",
+      password: "",
+    },
+  });
+
+  const handleAuthError = (error: AuthError) => {
+    const errorMessages: Record<string, string> = {
+      "Invalid login credentials": "Usuario o contraseña incorrectos",
+      "Email not confirmed": "Por favor confirma tu email",
+      "Invalid email": "El email no es válido",
+      "Rate limit exceeded": "Demasiados intentos, por favor espera un momento",
+    };
+
+    toast.error(errorMessages[error.message] || "Error al iniciar sesión");
+  };
+
+  const onSubmit = handleSubmit(async (formData) => {
     try {
-      setLoading(true)
-      setError(null)
+      setState((prev) => ({ ...prev, isLoading: true }));
 
-      const { data: { user, session }, error } = await supabase.auth.signInWithPassword({
-        email,
-        password,
-      })
+      if (!formData.email || !formData.password) {
+        toast.error("Por favor completa todos los campos");
+        return;
+      }
 
-      if (error) throw error
+      const { data, error } = (await supabase.auth.signInWithPassword({
+        email: formData.email,
+        password: formData.password,
+      })) as AuthResponse;
 
-      // Guardar en Zustand
-      setAuth(user, session)
+      if (error) {
+        handleAuthError(error);
+        return;
+      }
 
-      // Navegar al dashboard
-      navigate('/dashboard')
-      
+      if (!data?.session) {
+        toast.error("Error al iniciar sesión");
+        return;
+      }
+
+      setAuth(data.session);
+      toast.success("Inicio de sesión exitoso");
+      navigate("/dashboard");
     } catch (error) {
-      setError(error instanceof Error ? error.message : 'Error desconocido')
-      return false
+      toast.error(error as string);
     } finally {
-      setLoading(false)
+      setState((prev) => ({ ...prev, isLoading: false }));
     }
-    return true
-  }
+  });
 
   const logout = async () => {
     try {
-      setLoading(true)
-      const { error } = await supabase.auth.signOut()
-      if (error) throw error
-      
-      // Limpiar estado
-      useAuthStore.getState().clearAuth()
-      
-      // Redirigir al login
-      navigate('/login')
+      setState((prev) => ({ ...prev, isLoading: true }));
+      const { error } = await supabase.auth.signOut();
+      if (error) throw error;
+
+      clearAuth();
+      navigate("/login");
+      toast.success("Sesión cerrada");
     } catch (error) {
-      setError(error instanceof Error ? error.message : 'Error al cerrar sesión')
+      const authError = error as AuthError;
+      handleAuthError(authError);
     } finally {
-      setLoading(false)
+      setState((prev) => ({ ...prev, isLoading: false }));
     }
-  }
+  };
+
+  const togglePasswordVisibility = () => {
+    setState((prev) => ({ ...prev, showPassword: !prev.showPassword }));
+  };
 
   return {
-    login,
+    register,
+    onSubmit,
+    errors,
+    isLoading: state.isLoading,
+    showPassword: state.showPassword,
+    togglePasswordVisibility,
     logout,
-    loading,
-    error
-  }
-}
+    navigate,
+  };
+};
