@@ -74,8 +74,7 @@ export const useLogin = () => {
       toast.success("Inicio de sesión exitoso");
       navigate("/dashboard");
     } catch (error) {
-      console.error("Error en login:", error);
-      toast.error("Error de conexión");
+      toast.error(error as string);
     } finally {
       setState((prev) => ({ ...prev, isLoading: false }));
     }
@@ -93,7 +92,6 @@ export const useLogin = () => {
     } catch (error) {
       const authError = error as AuthError;
       handleAuthError(authError);
-      console.error("Error en logout:", authError);
     } finally {
       setState((prev) => ({ ...prev, isLoading: false }));
     }
@@ -111,5 +109,6 @@ export const useLogin = () => {
     showPassword: state.showPassword,
     togglePasswordVisibility,
     logout,
+    navigate,
   };
 };

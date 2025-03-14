@@ -1,6 +1,7 @@
 import { Routes, Route, Navigate } from "react-router-dom";
 import PrivateLayout from "@/layout/PrivateLayout";
 import { useProtectedRoute } from "../hooks/useProtectedRoute";
+import { useAuthStore } from "@/store/useAuthStore";
 import loading from "@/assets/img/loading.svg";
 //  auth
 import PageLogin from "@/pages/auth/login/Login";
@@ -11,6 +12,17 @@ import PageRecover from "@/pages/auth/recover/RecoverPass";
 import PageProfile from "@/pages/profile/Profile";
 import PageScanQr from "@/pages/scanqr/ScanQr";
 import PageDashboard from "@/pages/dashboard/Dashboard";
+import Home from "@/pages/home/Home";
+// Componente para la ruta de login
+const LoginRoute = () => {
+  const { isAuthenticated } = useAuthStore();
+
+  if (isAuthenticated) {
+    return <Navigate to="/dashboard" replace />;
+  }
+
+  return <PageLogin />;
+};
 
 // Componente para proteger rutas por rol
 const ProtectedRoute = ({
@@ -43,8 +55,8 @@ function RouterApp() {
   return (
     <Routes>
       {/* Rutas públicas */}
-      <Route path="/" element={<PageLogin />} />
-      <Route path="/login" element={<PageLogin />} />
+      <Route path="/" element={<Home />} />
+      <Route path="/login" element={<LoginRoute />} />
       <Route path="/recover" element={<PageRecover />} />
 
       {/* Rutas privadas con diferentes niveles de acceso */}
