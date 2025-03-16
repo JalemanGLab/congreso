@@ -7,6 +7,9 @@ import loading from "@/assets/img/loading.svg";
 import PageLogin from "@/pages/auth/login/Login";
 import PageRecover from "@/pages/auth/recover/RecoverPass";
 
+//  register
+import RegisterForm from '@/pages/register/RegisterForm';
+
 //  crear  validacion para que no se pueda acceder a la pagina si no esta logeado
 
 import PageProfile from "@/pages/profile/Profile";
@@ -61,6 +64,7 @@ function RouterApp() {
       <Route path="/" element={<Home />} />
       <Route path="/login" element={<LoginRoute />} />
       <Route path="/recover" element={<PageRecover />} />
+      <Route path="/register" element={<RegisterForm />} />
 
       {/* Rutas publicas */}
       <Route element={<PublicLayout />}>
