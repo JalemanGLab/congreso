@@ -1,5 +1,6 @@
 import { Routes, Route, Navigate } from "react-router-dom";
 import PrivateLayout from "@/layout/PrivateLayout";
+import PublicLayout from "@/layout/PublicLayout";
 import { useProtectedRoute } from "../hooks/useProtectedRoute";
 import { useAuthStore } from "@/store/useAuthStore";
 import loading from "@/assets/img/loading.svg";
@@ -12,6 +13,8 @@ import PageRecover from "@/pages/auth/recover/RecoverPass";
 import PageProfile from "@/pages/profile/Profile";
 import PageScanQr from "@/pages/scanqr/ScanQr";
 import PageDashboard from "@/pages/dashboard/Dashboard";
+import PageFaq from "@/pages/faq/Faq";
+import PageContacts from "@/pages/contacts/Contacts";
 import Home from "@/pages/home/Home";
 // Componente para la ruta de login
 const LoginRoute = () => {
@@ -54,10 +57,15 @@ const ProtectedRoute = ({
 function RouterApp() {
   return (
     <Routes>
-      {/* Rutas públicas */}
       <Route path="/" element={<Home />} />
       <Route path="/login" element={<LoginRoute />} />
       <Route path="/recover" element={<PageRecover />} />
+
+      {/* Rutas publicas */}
+      <Route element={<PublicLayout />}>
+        <Route path="/faq" element={<PageFaq />} />
+        <Route path="/contacts" element={<PageContacts />} />
+      </Route>
 
       {/* Rutas privadas con diferentes niveles de acceso */}
       <Route element={<PrivateLayout />}>
