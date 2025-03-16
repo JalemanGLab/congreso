@@ -1,5 +1,5 @@
 import { useForm } from "react-hook-form";
-import { DTOContacts } from "./DTOContacts";
+import { DTOContacts } from "@/types/pages/contacts";
 
 const useContacts = () => {
     const { register, handleSubmit, formState: { errors } } = useForm<DTOContacts>();

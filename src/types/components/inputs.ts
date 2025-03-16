@@ -1,4 +1,4 @@
-import { UseFormRegister, FieldErrors, RegisterOptions } from "react-hook-form";
+import { UseFormRegister, FieldErrors, RegisterOptions, Control } from "react-hook-form";
 
 export interface PersonalFormData {
     first_name: string;
@@ -62,12 +62,11 @@ export interface FormData {
 }
 
 export interface SelectDataProps {
-   label: string;
-   options: { value: string; label: string }[];
-   register: UseFormRegister<FormData>;
-   name: keyof FormData;
-   icon?: React.ElementType;
-   hasError?: boolean;
-   errorMessage?: string;
-   required?: boolean;
+    label: string;
+    options: { value: string; label: string }[];
+    name: string;
+    icon?: React.ElementType;
+    errors: FieldErrors<any>;
+    rules?: any;
+    control: Control<any>;
 }

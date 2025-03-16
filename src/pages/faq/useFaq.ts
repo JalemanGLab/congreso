@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react"
 import { useLocation } from "react-router-dom"
-import { QuestionMap } from "./DTOFaq"
+import { QuestionMap } from "@/types/pages/faq"
 
 const useFaq = () => {
     const [searchQuery, setSearchQuery] = useState("")

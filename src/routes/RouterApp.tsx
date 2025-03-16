@@ -64,12 +64,12 @@ function RouterApp() {
       <Route path="/" element={<Home />} />
       <Route path="/login" element={<LoginRoute />} />
       <Route path="/recover" element={<PageRecover />} />
-      <Route path="/register" element={<RegisterForm />} />
 
       {/* Rutas publicas */}
       <Route element={<PublicLayout />}>
         <Route path="/faq" element={<PageFaq />} />
         <Route path="/contacts" element={<PageContacts />} />
+        <Route path="/register" element={<RegisterForm />} />
       </Route>
       {/* Rutas privadas con diferentes niveles de acceso */}
       <Route element={<PrivateLayout />}>

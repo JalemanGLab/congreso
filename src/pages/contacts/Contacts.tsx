@@ -23,22 +23,26 @@ const PageContacts = () => {
                 </div>
             </div>
             <form onSubmit={handleSubmit(onSubmit)} className="w-full md:px-10  flex flex-col gap-4">
-                <div className="flex flex-col sm:flex-row gap-4">
+                <div className="w-full flex flex-col sm:flex-row gap-4">
                     <InputField 
-                        error={!!errors.email} 
-                        icon={IoMail} 
-                        register={register} 
-                        name="email" 
-                        label="Correo electrónico" 
-                        placeholder="Correo electrónico" 
+                        name="email"
+                        inputType="email"
+                        placeholder="Correo electrónico"
+                        label="Correo electrónico"
+                        childrenIcon={<IoMail className="text-2xl"/>}
+                        register={register}
+                        errors={errors}
+                        rules={{ required: true }}
                     />
                     <InputField 
-                        error={!!errors.subject} 
-                        icon={IoMail} 
-                        register={register} 
-                        name="subject" 
-                        label="Asunto" 
+                        name="subject"
+                        inputType="text"
                         placeholder="Asunto"
+                        label="Asunto"
+                        childrenIcon={<IoMail className="text-2xl"/>}
+                        register={register}
+                        errors={errors}
+                        rules={{ required: true }}
                     />
                 </div>
                 <div className="flex flex-col gap-1">
@@ -46,7 +50,7 @@ const PageContacts = () => {
                     <textarea 
                         {...register("message")}
                         placeholder="Mensaje"
-                        className="w-full h-24 min-h-[100px] max-h-[200px] p-2 border border-gray-300 rounded-md"
+                        className="w-full h-24 min-h-[150px] max-h-[150px] p-2 border border-gray-300 rounded-md resize-none outline-none"
                     />
                 </div>
                 <div className="flex justify-end">
