@@ -1,5 +1,6 @@
 import React from 'react';
-import { FieldErrors, Controller, Control } from 'react-hook-form';
+import { Controller } from 'react-hook-form';
+import { SelectDataProps } from "@/types/components/inputs";
 import {
     Select,
     SelectContent,
@@ -9,16 +10,6 @@ import {
     SelectTrigger,
     SelectValue,
 } from "@/components/ui/select";
-
-interface SelectDataProps {
-    label: string;
-    options: { value: string; label: string }[];
-    name: string;
-    icon?: React.ElementType;
-    errors: FieldErrors<any>;
-    rules?: any;
-    control: Control<any>;
-}
 
 const SelectData: React.FC<SelectDataProps> = ({
     label,

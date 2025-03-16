@@ -1,5 +1,5 @@
 import React from 'react';
-import { InputFieldProps } from '@/types/inputs';
+import { InputFieldProps } from '@/types/components/inputs';
 
 const InputField: React.FC<InputFieldProps> = ({
     name,
@@ -13,7 +13,7 @@ const InputField: React.FC<InputFieldProps> = ({
     label
 }) => {
     return (
-        <div className="flex flex-col gap-1">
+        <div className="w-full flex flex-col gap-1">
             {label && <label className="text-sm text-gray-500 font-normal">{label}</label>}
             <div className="relative w-full h-[40px]">
                 <input

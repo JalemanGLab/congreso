@@ -16,6 +16,9 @@ import PageProfile from "@/pages/profile/Profile";
 import PageScanQr from "@/pages/scanqr/ScanQr";
 import PageDashboard from "@/pages/dashboard/Dashboard";
 import Home from "@/pages/home/Home";
+import PageFaq from "@/pages/faq/Faq";
+import PublicLayout from "@/layout/PublicLayout";
+import PageContacts from "@/pages/contacts/Contacts";
 // Componente para la ruta de login
 const LoginRoute = () => {
   const { isAuthenticated } = useAuthStore();
@@ -61,8 +64,13 @@ function RouterApp() {
       <Route path="/" element={<Home />} />
       <Route path="/login" element={<LoginRoute />} />
       <Route path="/recover" element={<PageRecover />} />
-      <Route path="/register" element={<RegisterForm />} />
 
+      {/* Rutas publicas */}
+      <Route element={<PublicLayout />}>
+        <Route path="/faq" element={<PageFaq />} />
+        <Route path="/contacts" element={<PageContacts />} />
+        <Route path="/register" element={<RegisterForm />} />
+      </Route>
       {/* Rutas privadas con diferentes niveles de acceso */}
       <Route element={<PrivateLayout />}>
         {/* Rutas accesibles para todos los usuarios autenticados */}

@@ -5,17 +5,7 @@ import { useAuthStore } from "@/store/useAuthStore";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 import type { AuthError, AuthResponse } from "@supabase/supabase-js";
-
-interface LoginFormValues {
-  email: string;
-  password: string;
-}
-
-interface LoginState {
-  isLoading: boolean;
-  showPassword: boolean;
-}
-
+import { LoginFormValues, LoginState } from "@/types/pages/auth";
 export const useLogin = () => {
   const [state, setState] = useState<LoginState>({
     isLoading: false,
