@@ -83,6 +83,7 @@ const useRegisterForm = () => {
     });
 
     const handleStep1Submit = async (data: any) => {
+        console.log(data);
         const isValid = await trigger(['first_name', 'last_name', 'email', 'id', 'phone', 'city']);
         if (!isValid) {
             toast.error('Por favor complete todos los campos requeridos');
@@ -103,6 +104,7 @@ const useRegisterForm = () => {
     };
 
     const handleStep3Submit = async (data: any) => {
+        console.log(data);
         if (selectedPayment === 'card') {
             const isValid = await triggerPayment(['card_name', 'card_number', 'expiry_date', 'cvc']);
             if (!isValid) {
