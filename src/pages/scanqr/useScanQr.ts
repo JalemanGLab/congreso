@@ -16,13 +16,13 @@ export const useScanQr = () => {
         { facingMode: "environment" },
         {
           fps: 10,
-          qrbox: { width: 250, height: 250 },
+		  qrbox: { width: 350, height: 350 },
           aspectRatio: 1.0
         },
         (decodedText) => {
           console.log("QR DETECTADO!");
           console.log("Contenido:", decodedText);
-          
+
           toast.success('QR detectado exitosamente!', {
             description: decodedText,
             duration: 5000,
