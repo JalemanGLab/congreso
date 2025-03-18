@@ -63,13 +63,13 @@ function RouterApp() {
       {/* Rutas públicas */}
       <Route path="/" element={<Home />} />
       <Route path="/login" element={<LoginRoute />} />
-      <Route path="/recover" element={<PageRecover />} />
 
       {/* Rutas publicas */}
       <Route element={<PublicLayout />}>
         <Route path="/faq" element={<PageFaq />} />
         <Route path="/contacts" element={<PageContacts />} />
         <Route path="/register" element={<RegisterForm />} />
+      <Route path="/recover" element={<PageRecover />} />
       </Route>
       {/* Rutas privadas con diferentes niveles de acceso */}
       <Route element={<PrivateLayout />}>
